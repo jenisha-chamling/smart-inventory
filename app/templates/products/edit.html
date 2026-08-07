@@ -1,0 +1,204 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Edit Product
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-8">
+
+            <div class="card shadow">
+
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        Edit Product
+                    </h4>
+                </div>
+
+                <div class="card-body">
+
+                    <form method="POST">
+
+                        {{ form.hidden_tag() }}
+
+                        <!-- Product Name -->
+                        <div class="mb-3">
+
+                            {{ form.name.label(
+                                class="form-label"
+                            ) }}
+
+                            {{ form.name(
+                                class="form-control"
+                            ) }}
+
+                            {% for error in form.name.errors %}
+                                <div class="text-danger small">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- SKU -->
+                        <div class="mb-3">
+
+                            {{ form.sku.label(
+                                class="form-label"
+                            ) }}
+
+                            {{ form.sku(
+                                class="form-control"
+                            ) }}
+
+                            {% for error in form.sku.errors %}
+                                <div class="text-danger small">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+
+                        </div>
+
+                        <!-- Supplier -->
+
+<div class="mb-3">
+
+    {{ form.supplier_id.label(
+        class="form-label"
+    ) }}
+
+    {{ form.supplier_id(
+        class="form-select"
+    ) }}
+
+    {% for error in form.supplier_id.errors %}
+
+        <div class="text-danger small">
+            {{ error }}
+        </div>
+
+    {% endfor %}
+
+</div>
+
+
+                        <!-- Description -->
+                        <div class="mb-3">
+
+                            {{ form.description.label(
+                                class="form-label"
+                            ) }}
+
+                            {{ form.description(
+                                class="form-control",
+                                rows="3"
+                            ) }}
+
+                            {% for error in form.description.errors %}
+                                <div class="text-danger small">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- Quantity -->
+                        <div class="mb-3">
+
+                            {{ form.quantity.label(
+                                class="form-label"
+                            ) }}
+
+                            {{ form.quantity(
+                                class="form-control"
+                            ) }}
+
+                            {% for error in form.quantity.errors %}
+                                <div class="text-danger small">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- Price -->
+                        <div class="mb-3">
+
+                            {{ form.price.label(
+                                class="form-label"
+                            ) }}
+
+                            {{ form.price(
+                                class="form-control"
+                            ) }}
+
+                            {% for error in form.price.errors %}
+                                <div class="text-danger small">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- Reorder Level -->
+                        <div class="mb-3">
+
+                            {{ form.reorder_level.label(
+                                class="form-label"
+                            ) }}
+
+                            {{ form.reorder_level(
+                                class="form-control"
+                            ) }}
+
+                            {% for error in form.reorder_level.errors %}
+                                <div class="text-danger small">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+
+                        </div>
+
+
+                        <div class="d-flex gap-2">
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary">
+
+                                Update Product
+
+                            </button>
+
+                            <a
+                                href="{{ url_for('products.product_list') }}"
+                                class="btn btn-secondary">
+
+                                Cancel
+
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
