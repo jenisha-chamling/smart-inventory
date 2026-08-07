@@ -1,32 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "layouts/base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Smart Inventory Management System</title>
+{% block title %}
+Home
+{% endblock %}
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+{% block content %}
 
-<body>
+<div class="text-center mt-5">
 
-<div class="container mt-5">
+    <h1>Smart Inventory Management System</h1>
 
-    <div class="text-center">
+    <p class="lead">
+        Welcome to your first Flask project.
+    </p>
 
-        <h1>Smart Inventory Management System</h1>
-
-        <p class="lead">
-            Welcome to your first Flask project.
-        </p>
-
-        <a href="#" class="btn btn-primary">
-            Get Started
-        </a>
-
-    </div>
+    <a href="{{ url_for('auth.register') }}"
+       class="btn btn-primary">
+        Get Started
+    </a>
 
 </div>
 
-</body>
-</html>
+{% endblock %}
