@@ -1,12 +1,3 @@
-# from flask import Flask
-
-# def create_app():
-#     app = Flask(__name__)
-
-#     from .routes import main
-#     app.register_blueprint(main)
-
-#     return app
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
@@ -27,5 +18,8 @@ def create_app():
 
     from .routes import main
     app.register_blueprint(main)
+
+    from .auth import auth
+    app.register_blueprint(auth)
 
     return app
