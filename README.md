@@ -1,375 +1,688 @@
 # Smart Inventory Management System
 
-A web-based inventory management system developed using **Python, Flask, MySQL, SQLAlchemy, Flask-Login, Flask-WTF, Flask-Migrate, Jinja2, and Bootstrap**.
+## Overview
 
-The system provides authenticated users with a centralized platform to manage products and suppliers, monitor stock levels, and perform basic inventory operations.
+Smart Inventory Management System is a web-based inventory management application developed using Python, Flask, MySQL, SQLAlchemy, and Bootstrap.
 
----
+The project is designed using a modular Flask application structure to separate authentication, dashboard, product management, and supplier management functionality.
 
-## Project Overview
+The primary objective of the project is to develop a maintainable and scalable inventory management application while applying software engineering concepts such as:
 
-The Smart Inventory Management System was developed as a practical software engineering project to demonstrate backend development, database integration, authentication, CRUD operations, form validation, security, and modular application design.
+- Modular application architecture
+- Database-driven application development
+- CRUD operations
+- User authentication and authorization
+- Form validation
+- Database migrations
+- Separation of concerns
+- Reusable templates
+- Secure configuration management
+- Error handling and user feedback
 
-The application follows a modular Flask architecture where authentication, dashboard, products, and suppliers are handled as separate functional components.
+The current implementation focuses on the core functionality required to manage users, suppliers, and products.
 
 ---
 
 ## Key Features
 
-- User registration and login
-- Secure password hashing
-- Remember Me functionality
+### User Authentication
+
+The application provides a complete authentication workflow using Flask-Login.
+
+Implemented functionality includes:
+
+- User registration
+- User login
 - User logout
-- Authentication-based navigation
-- Protected application routes
-- Dashboard
-- Product management
-- Supplier management
-- Product-supplier relationship
-- Stock-level monitoring
-- Low-stock detection
-- Form validation
-- Duplicate SKU validation
-- MySQL database integration
-- Database migrations
-- CSRF protection
-- Flash messages
-- Responsive Bootstrap interface
+- Session-based authentication
+- Protection of authenticated routes
+- Redirecting unauthenticated users to the login page
+- Displaying authentication-related feedback messages
+
+Authenticated users can access protected application modules such as products and suppliers.
 
 ---
 
-# Modules
+### Dashboard
 
-## 1. Main Module
+The dashboard provides a centralized entry point for authenticated users.
 
-The Main module provides the public home page of the application.
+It provides navigation to the main modules currently implemented in the system, including:
 
-It acts as the initial entry point for users and provides access to authentication features.
+- Dashboard
+- Products
+- Suppliers
+- Home
+- Logout
 
-Unauthenticated users can access:
+The dashboard structure is designed so that additional inventory-related functionality can be integrated later without significantly changing the existing application architecture.
 
-```text
-Home | Register | Login
-2. Authentication Module
+---
 
-The Authentication module manages user accounts and login sessions using Flask-Login.
+### Supplier Management
 
-Registration
+The supplier module provides functionality for managing supplier information.
 
-Users can create an account using their name, email, and password.
+Implemented operations include:
 
-During registration, the application checks whether the email is already registered. Passwords are securely hashed before being stored in the database.
+- Creating suppliers
+- Viewing suppliers
+- Editing supplier information
+- Deleting suppliers
 
-Login
+The supplier module follows Flask's Blueprint-based organization, keeping supplier-related routes separate from other application functionality.
 
-Users can log in using their registered email and password. The system verifies the credentials and creates an authenticated session.
+This modular approach improves code organization and makes the application easier to maintain and extend.
 
-Invalid credentials generate an appropriate error message.
+---
 
-Logout
+### Product Management
 
-Authenticated users can log out, ending their authenticated session.
-
-Remember Me
-
-The login form also supports a Remember Me option for maintaining the user's login session.
-
-After login, authenticated users can access:
-
-Home | Dashboard | Products | Suppliers | Logout
-3. Dashboard Module
-
-The Dashboard provides the main interface for authenticated users.
-
-It currently displays inventory-related information and provides quick access to common operations.
-
-The Dashboard includes:
-
-Inventory/product information
-Supplier information
-Low-stock information
-Quick Actions
-Today's Sales section in the interface
-Stock Monitoring
-
-The system determines stock status using the product quantity and reorder level.
-
-Quantity <= Reorder Level → Low Stock
-Quantity > Reorder Level  → In Stock
-
-The Dashboard also provides quick actions such as adding products, adding suppliers, and viewing products.
-
-The Sales section is currently part of the Dashboard interface; a separate Sales Management module has not been implemented.
-
-4. Product Management Module
-
-The Product module provides complete CRUD functionality for inventory products.
+The product module provides the core inventory management functionality currently implemented in the system.
 
 Users can:
 
-Add products
-View products
-Edit products
-Delete products
-Assign suppliers
-Set product quantity
-Set product price
-Set reorder level
-Monitor stock status
-Product Information
+- Add products
+- View products
+- Edit products
+- Delete products
+- Assign suppliers to products
+- Manage product SKU
+- Manage product quantity
+- Manage product price
+- Define product reorder levels
 
-Products contain information such as:
+The product listing displays important inventory information such as:
 
-Product ID
-Name
-SKU
-Description
-Quantity
-Price
-Reorder Level
-Supplier
-Add Product
+- Product name
+- SKU
+- Supplier
+- Quantity
+- Price
+- Reorder level
+- Stock status
 
-Before a product is stored, the application validates the submitted form and checks whether the SKU already exists.
+---
 
-This prevents duplicate product identifiers.
+### Stock-Level Monitoring
 
-Edit Product
+The system includes basic inventory status monitoring using product quantity and reorder level.
 
-Existing products can be updated through a dedicated edit form. During editing, SKU uniqueness is checked while excluding the current product.
+The application compares the current quantity of a product with its defined reorder level.
 
-Delete Product
+The logic is:
 
-Products can be deleted using a POST request with confirmation and CSRF protection.
+    If quantity <= reorder level
+        → Low Stock
 
-5. Supplier Management Module
+    If quantity > reorder level
+        → In Stock
 
-The Supplier module provides CRUD functionality for managing suppliers.
+This provides users with a simple way to identify products that may require restocking.
 
-Users can:
+---
 
-Add suppliers
-View suppliers
-Edit suppliers
-Delete suppliers
+# Software Engineering Implementation
 
-Suppliers can also be associated with products.
+The project is developed with software engineering principles in mind rather than implementing all functionality in a single Flask file.
 
-When creating or editing a product, available suppliers are retrieved from the database and displayed as selectable options.
+## Modular Application Design
 
-A product can also be saved without a supplier.
+The application separates major functionality into independent Flask Blueprints.
 
-6. Database and Models
+The completed modules include:
 
-The application uses MySQL as its relational database and SQLAlchemy as the ORM.
+### `app/auth/`
 
-The main database entities implemented are:
+This module contains authentication-related functionality.
 
-User
+It is responsible for:
 
-Stores registered user information and authentication-related data.
+- Registration
+- Login
+- Logout
+- Authentication-related routes
 
-Product
+Separating authentication into its own module improves maintainability and allows authentication functionality to be modified without affecting product or supplier logic.
 
-Stores product information including name, SKU, quantity, price, reorder level, description, and supplier relationship.
+---
 
-Supplier
+### `app/dashboard/`
 
-Stores supplier information and provides relationships with products.
+This module contains dashboard-related functionality.
 
-The general data flow is:
+It provides the authenticated user with a central interface for accessing the application's major modules.
 
-Flask Application
-       ↓
-SQLAlchemy ORM
-       ↓
-MySQL Database
-7. Forms and Validation
+The dashboard is separated from other application functionality to maintain a clear separation of responsibilities.
 
-The project uses Flask-WTF and WTForms for form handling and validation.
+---
 
-The implemented forms include:
+### `app/products/`
 
-RegisterForm
-LoginForm
-ProductForm
-SupplierForm
+This module handles product and inventory-related operations.
 
-Validation is performed before database operations.
+It contains routes responsible for:
 
-The Product module also implements business validation for duplicate SKUs.
+- Listing products
+- Adding products
+- Editing products
+- Deleting products
 
-8. Security
+The module also handles supplier assignment and stock-level information associated with products.
 
-Several security practices have been implemented.
+---
 
-Password Hashing
+### `app/suppliers/`
 
-User passwords are hashed instead of being stored as plain text.
+This module handles supplier management.
 
-CSRF Protection
+It contains functionality for:
 
-CSRF tokens are used for state-changing form submissions.
+- Listing suppliers
+- Adding suppliers
+- Editing suppliers
+- Deleting suppliers
 
-Protected Routes
+Supplier functionality is kept separate from product functionality while still allowing products to reference suppliers through the database relationship.
 
-Features such as Products and Suppliers require authentication using Flask-Login's login_required.
+---
 
-POST for Deletion
+## Application Core
 
-Product deletion uses a POST request instead of exposing deletion through a simple GET URL.
+### `app/__init__.py`
 
-9. Application Architecture
+This file contains the Flask application factory and initializes the major Flask extensions used by the project.
 
-The application uses Flask Blueprints to separate functionality into modules:
+The application factory pattern is used through:
 
-Main
-Authentication
-Dashboard
-Products
-Suppliers
+    create_app()
 
-The project also uses the Application Factory pattern to initialize the Flask application and register its components.
+The application initializes:
 
-This modular structure improves:
+- Flask
+- SQLAlchemy
+- Flask-Migrate
+- Flask-Login
 
-Maintainability
-Separation of concerns
-Debugging
-Scalability
-Future development
-10. Templates and User Interface
+It also registers the application's Blueprints.
 
-The frontend uses HTML, Jinja2, and Bootstrap 5.
+Using an application factory makes the application easier to configure, test, and extend.
 
-A reusable base template is used for common elements such as:
+---
 
-Navigation
-Flash messages
-Page structure
-Content area
+### `app/config.py`
 
-Individual pages extend the base template using Jinja2 template inheritance.
+This file contains application configuration.
 
-The navigation dynamically changes according to the user's authentication state.
+Environment variables are loaded using `python-dotenv`.
 
-Bootstrap components are used for tables, forms, buttons, alerts, cards, and badges.
+Database configuration and the Flask secret key are kept outside the source code through environment variables.
 
-11. Database Migrations
+This approach prevents sensitive configuration values from being hard-coded directly into the application.
+
+---
+
+### `app/models.py`
+
+This file contains the SQLAlchemy database models.
+
+The User model stores user-related information required for authentication.
+
+The project also uses database models for product and supplier management.
+
+SQLAlchemy provides an ORM-based approach for interacting with the MySQL database instead of writing raw SQL queries throughout the application.
+
+---
+
+### `app/forms.py`
+
+This file contains the application's form classes.
+
+Forms are used for handling user input and validating submitted data.
+
+The completed application uses forms for areas such as:
+
+- User registration
+- User login
+- Product creation and editing
+- Supplier-related input
+
+Using dedicated form classes keeps validation logic separate from route logic and improves code maintainability.
+
+---
+
+## Templates
+
+The application uses Jinja2 templates with a reusable layout system.
+
+The main completed template areas are:
+
+### `app/templates/auth/`
+
+Contains authentication-related pages such as:
+
+- Registration
+- Login
+
+---
+
+### `app/templates/dashboard/`
+
+Contains dashboard-related templates.
+
+The dashboard provides a centralized interface for authenticated users.
+
+---
+
+### `app/templates/products/`
+
+Contains product management pages such as:
+
+- Product listing
+- Add product
+- Edit product
+
+These templates use reusable form and layout patterns to reduce duplication.
+
+---
+
+### `app/templates/suppliers/`
+
+Contains supplier management pages.
+
+These templates provide interfaces for viewing and managing supplier information.
+
+---
+
+### `app/templates/layouts/`
+
+Contains reusable application layouts.
+
+The main layout provides common elements such as:
+
+- Navigation bar
+- Flash messages
+- Bootstrap integration
+- Main content area
+- Template inheritance
+
+Individual pages extend the base layout rather than duplicating the same HTML structure.
+
+This improves consistency and maintainability across the application.
+
+---
+
+# Database Management
+
+## MySQL
+
+MySQL is used as the primary relational database.
+
+The database stores application data such as:
+
+- Users
+- Products
+- Suppliers
+
+Relationships between entities are represented using SQLAlchemy models.
+
+For example, products can be associated with suppliers, allowing the system to display the supplier of a particular product.
+
+---
+
+## SQLAlchemy
+
+Flask-SQLAlchemy is used as the ORM layer.
+
+It provides:
+
+- Model-based database design
+- Database queries
+- Relationships between entities
+- CRUD operations
+- Session management
+
+This allows application logic to interact with the database using Python objects and SQLAlchemy queries.
+
+---
+
+## Database Migrations
 
 Flask-Migrate is used to manage database schema changes.
 
-Migration commands include:
+The migration workflow used in the project includes:
 
-flask db migrate -m "Describe change"
-flask db upgrade
+    flask db migrate -m "Migration message"
 
-This allows database changes to be tracked and applied systematically.
+and:
 
-12. Error Handling and Debugging
+    flask db upgrade
 
-During development, Flask's debugging tools and route inspection were used to identify and resolve issues related to:
+This provides a controlled way to apply database structure changes without manually recreating the database.
 
-Blueprint registration
-Template paths
-Imports
-Authentication
-CSRF configuration
-Database queries
-Jinja2 rendering
-Route registration
+The `migrations/` directory stores the generated migration history.
 
-Registered routes can be verified using:
+---
 
-python -m flask routes
+# Authentication and Security
 
-This helped ensure that the application's endpoints were correctly registered.
+Flask-Login is used to manage user sessions.
 
-13. Technology Stack
-Technology	Purpose
-Python	Backend programming
-Flask	Web framework
-MySQL	Database
-SQLAlchemy	ORM
-Flask-Login	Authentication
-Flask-WTF / WTForms	Forms and validation
-Flask-Migrate	Database migrations
-Jinja2	Template engine
-Bootstrap 5	User interface
-14. Software Engineering Concepts Demonstrated
+Protected routes use:
 
-This project demonstrates practical experience with:
+    @login_required
 
-Modular application architecture
-Separation of concerns
-CRUD operations
-Database-driven development
-Authentication and session management
-Form validation
-Database relationships
-Password security
-CSRF protection
-Error handling
-Debugging
-Template inheritance
-Database migrations
-Business logic implementation
-15. Setup and Installation
-Clone the repository
-git clone <repository-url>
-cd smart_inventory_system
-Create a virtual environment
-python -m venv venv
+This ensures that only authenticated users can access protected functionality.
 
-Activate it on Windows:
+The application also uses:
 
-venv\Scripts\activate
-Install dependencies
-pip install -r requirements.txt
-Configure MySQL
+- Password handling
+- Session-based authentication
+- CSRF protection for forms
+- Environment variables for sensitive configuration
+- Login redirects for unauthorized access
 
-Create the required MySQL database and configure the application's database connection.
+Sensitive database credentials are stored in `.env` rather than being directly written into the application source code.
 
-Apply migrations
-flask db upgrade
-Run the application
-python run.py
+---
 
-The application can then be accessed through the local Flask server.
+# Validation and Error Handling
 
-16. Current Project Scope
-Completed
-Main/Home
-User Authentication
-Dashboard
-Product Management
-Supplier Management
-Product-Supplier Relationship
-Database Integration
-Forms and Validation
-CRUD Operations
-Stock Monitoring
-Authentication Protection
-CSRF Protection
-Password Hashing
-Database Migrations
-Modular Flask Architecture
-Future Enhancements
+The application performs validation before processing submitted forms.
 
-Potential future additions include:
+Examples include:
 
-Sales Management
-Advanced Inventory Transactions
-Reports
-Analytics
-Role-Based Access Control
-Automated Testing
-Search and Filtering
-Data Export
-Notifications
-Author
+- Checking whether an email is already registered
+- Checking whether a product SKU already exists
+- Validating product information
+- Validating supplier information
+- Handling missing database records
 
-Jenisha
-BSc CSIT — Final Year Student
+The application uses Flask's `flash()` mechanism to provide feedback to users after operations.
 
-Developed as a practical software engineering project demonstrating Python/Flask backend development, database management, authentication, CRUD operations, validation, security, and modular application architecture
+Examples include:
+
+- Successful registration
+- Successful product creation
+- Successful product update
+- Successful deletion
+- Invalid login credentials
+- Duplicate product SKU
+- Duplicate email registration
+
+This provides users with clear feedback about the result of their actions.
+
+---
+
+# CRUD Operations
+
+The project demonstrates complete CRUD functionality for the main management entities.
+
+CRUD stands for:
+
+- **Create** – Add a new record
+- **Read** – View existing records
+- **Update** – Modify an existing record
+- **Delete** – Remove a record
+
+The completed product and supplier modules use these operations to manage inventory-related data.
+
+---
+
+# Frontend
+
+The application uses:
+
+- HTML5
+- Jinja2
+- Bootstrap 5
+
+Bootstrap is currently used through its CDN integration.
+
+The reusable base template provides a consistent navigation system and page layout across the application.
+
+The interface includes responsive navigation and Bootstrap components such as:
+
+- Navigation bars
+- Buttons
+- Tables
+- Forms
+- Cards
+- Alerts
+- Badges
+
+---
+
+# Application Workflow
+
+The current application workflow is:
+
+    User
+      |
+      v
+    Register
+      |
+      v
+    Login
+      |
+      v
+    Dashboard
+      |
+      +-------------------+
+      |                   |
+      v                   v
+    Suppliers          Products
+      |                   |
+      |                   +--> Add Product
+      |                   |
+      |                   +--> View Products
+      |                   |
+      |                   +--> Edit Product
+      |                   |
+      |                   +--> Delete Product
+      |
+      +--> Add Supplier
+      |
+      +--> View Suppliers
+      |
+      +--> Edit Supplier
+      |
+      +--> Delete Supplier
+
+---
+
+# Technologies Used
+
+## Backend
+
+- Python
+- Flask
+- Flask-SQLAlchemy
+- Flask-Migrate
+- Flask-Login
+- Flask-WTF / WTForms
+
+## Frontend
+
+- HTML5
+- Jinja2
+- Bootstrap 5
+
+## Database
+
+- MySQL
+- PyMySQL
+
+## Development
+
+- Python Virtual Environment
+- Flask CLI
+- Git
+- GitHub
+
+---
+
+# Environment Configuration
+
+The application uses a `.env` file for sensitive configuration.
+
+Example:
+
+    SECRET_KEY=your_secret_key
+
+    DB_USER=root
+    DB_PASSWORD=your_password
+    DB_HOST=localhost
+    DB_PORT=3306
+    DB_NAME=smart_inventory
+
+Actual credentials should never be committed to the repository.
+
+The `.env` file should be included in `.gitignore`.
+
+---
+
+# Installation
+
+## 1. Create a Virtual Environment
+
+    python -m venv venv
+
+Activate the environment on Windows:
+
+    venv\Scripts\activate
+
+---
+
+## 2. Install Dependencies
+
+    pip install -r requirements.txt
+
+---
+
+## 3. Configure Environment Variables
+
+Create a `.env` file and configure the required database and application settings.
+
+---
+
+## 4. Configure MySQL
+
+Create the required MySQL database and ensure that the credentials in `.env` match the database configuration.
+
+---
+
+## 5. Apply Database Migrations
+
+Run:
+
+    flask db upgrade
+
+If new model changes are introduced:
+
+    flask db migrate -m "Describe the change"
+
+    flask db upgrade
+
+---
+
+## 6. Run the Application
+
+    python run.py
+
+The application will normally be available at:
+
+    http://127.0.0.1:5000
+
+---
+
+# Development Practices Demonstrated
+
+This project demonstrates practical software engineering concepts including:
+
+- Modular Flask architecture
+- Blueprint-based application organization
+- Application factory pattern
+- Separation of concerns
+- ORM-based database access
+- Database relationships
+- CRUD implementation
+- Form validation
+- Authentication and authorization
+- Database migration management
+- Reusable template inheritance
+- Environment-based configuration
+- Error handling
+- User feedback through flash messages
+- Protected application routes
+
+These practices make the application easier to understand, maintain, test, and extend.
+
+---
+
+# Testing
+
+A `tests/` directory is included for application testing.
+
+Testing can be expanded to cover:
+
+- Authentication
+- Form validation
+- Product CRUD operations
+- Supplier CRUD operations
+- Protected routes
+- Database operations
+
+The test structure provides a foundation for implementing automated testing as the project continues to grow.
+
+---
+
+# Current Status
+
+The current version implements the core inventory management functionality, including:
+
+- User authentication
+- Dashboard
+- Supplier management
+- Product management
+- Supplier-product relationship
+- Inventory quantity tracking
+- Reorder-level monitoring
+- CRUD operations
+- Database migrations
+- Protected routes
+
+The application is currently focused on the core inventory and administration workflow.
+
+---
+
+# Future Improvements
+
+Possible future improvements include:
+
+- Inventory transaction management
+- Sales management
+- Reports and analytics
+- Advanced dashboard statistics
+- Product search and filtering
+- Pagination
+- Role-based access control
+- Admin and staff roles
+- Automated testing
+- API development
+- Inventory notifications
+- Report export functionality
+
+---
+
+# Author
+
+**Jenisha**
+
+BSc CSIT Student
+
+---
+
+# License
+
+This project was developed for educational and software engineering learning purposes.
